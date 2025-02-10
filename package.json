@@ -1,0 +1,29 @@
+{
+  "name": "homelands_api",
+  "version": "1.0.0",
+  "description": "API in NodeJS, Express og Sequelize",
+  "main": "index.js",
+  "type": "module",
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Razzoy/Homelands_API.git"
+  },
+  "author": "Mathias Arenfeldt Olesen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Razzoy/Homelands_API/issues"
+  },
+  "homepage": "https://github.com/Razzoy/Homelands_API#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0",
+    "sequelize": "^6.37.5"
+  }
+  
+}
