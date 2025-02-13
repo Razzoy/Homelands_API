@@ -1,7 +1,10 @@
 import express from "express";
 import { cityModel } from "../models/cityModel.js";
+import { Authorize } from "../utils/authUtils.js";
 
 export const cityController = express.Router();
+
+
 
 
 //Route to list (READ)
@@ -41,7 +44,7 @@ cityController.get("/cities/:id([0-9]*)", async (req, res) => {
 
 
 //Route to create (CREATE)
-cityController.post("/cities", async (req, res) => {
+cityController.post("/cities", Authorize , async (req, res) => {
   const { zipcode, name } = req.body;
 
   if ( !zipcode || !name ) {
@@ -61,7 +64,7 @@ cityController.post("/cities", async (req, res) => {
 });
 
 //Route to update (UPDATE)
-cityController.put("/cities", async (req, res) => {
+cityController.put("/cities", Authorize , async (req, res) => {
   const { zipcode, name, id } = req.body;
 
   if (!id || !zipcode || !name ) {
@@ -81,7 +84,7 @@ cityController.put("/cities", async (req, res) => {
 });
 
 //Route to delete (DELETE)
-cityController.delete("/cities/:id([0-9]*)", async (req, res) => {
+cityController.delete("/cities/:id([0-9]*)", Authorize , async (req, res) => {
   const { id } = req.params;
 
   const city = await cityModel.findOne({

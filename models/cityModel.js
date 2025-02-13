@@ -1,9 +1,9 @@
-import sequelize from "../config/sequelizeClient.js";
+import sequelize from "../config/sequelizeConfig.js";
 import { Model, DataTypes } from "sequelize";
 
-export class estateModel extends Model {}
+export class cityModel extends Model {}
 
-estateModel.init(
+cityModel.init(
   {
     id: {
       type: DataTypes.INTEGER,

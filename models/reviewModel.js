@@ -1,5 +1,7 @@
-import sequelize from "../config/sequelizeClient.js";
+import sequelize from "../config/sequelizeConfig.js";
 import { Model, DataTypes } from "sequelize";
+import { estateModel } from "./estateModel.js";
+import { userModel } from "./userModel.js";
 
 export class reviewModel extends Model {}
 
@@ -18,9 +20,9 @@ reviewModel.init(
     },
 
     comment: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
 
     num_stars: {
       type: DataTypes.INTEGER,
@@ -28,25 +30,32 @@ reviewModel.init(
     },
 
     date: {
-        type: DataTypes.DATE,
-        allowNull: true,
+      type: DataTypes.DATE,
+      allowNull: true,
     },
 
     estate_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: estateModel,
+        key: "id",
+      },
     },
 
     user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: userModel,
+        key: "id",
+      },
     },
 
     is_active: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
     },
-
   },
   {
     sequelize,
@@ -54,7 +63,6 @@ reviewModel.init(
     underscored: true,
     freezeTableName: false,
     createdAt: true,
-    updatedAt: true, 
+    updatedAt: true,
   }
 );
-

@@ -1,4 +1,4 @@
-import sequelize from "../config/sequelizeClient.js";
+import sequelize from "../config/sequelizeConfig.js";
 import { Model, DataTypes } from "sequelize";
 
 export class energyLabelModel extends Model {}

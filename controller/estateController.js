@@ -1,24 +1,60 @@
 import express from "express";
-import { estateModel } from "../models/estateModel";
+import { estateModel } from "../models/estateModel.js";
+import { estateTypeModel } from "../models/estateTypeModel.js";
+import { energyLabelModel } from "../models/energyLabelModel.js";
+import { cityModel } from "../models/cityModel.js";
+import { imageModel } from "../models/imageModel.js";
+import { estateImageRelModel } from "../models/estateImageRelModel.js";
+import { Authorize } from "../utils/authUtils.js";
 
 export const estateController = express.Router();
+
+estateModel.belongsTo(estateTypeModel, {
+  foreignKey: {
+    allowNull: false,
+  },
+});
+
+estateModel.belongsTo(energyLabelModel, {
+  foreignKey: {
+    allowNull: false,
+  },
+});
+
+estateModel.belongsTo(cityModel, {
+  foreignKey: {
+    allowNull: false,
+  },
+});
+
+//many to many relations
+estateModel.belongsToMany(imageModel, { through: estateImageRelModel });
+imageModel.belongsToMany(estateModel, { through: estateImageRelModel });
+
+estateTypeModel.hasMany(estateModel);
+energyLabelModel.hasMany(estateModel);
+cityModel.hasMany(estateModel);
 
 estateController.get("/estates", async (req, res) => {
   try {
     const data = await estateModel.findAll({
-      attributes: [
-        "id",
-        "address",
-        "price",
-        "num_rooms",
-        "num_floors",
-        "floor_space",
-        "ground_space",
-        "basement_space",
-        "year_of_construction",
-        "city_id",
-        "type_id",
-        "energy_label_id",
+      include: [
+        {
+          model: estateTypeModel,
+          attributes: ["id", "name"],
+        },
+        {
+          model: energyLabelModel,
+          attributes: ["id", "name"],
+        },
+        {
+          model: cityModel,
+          attributes: ["id", "name", "zipcode"],
+        },
+        {
+          model: imageModel,
+          attributes: ["id", "filename", "author", "description"],
+        },
       ],
     });
 
@@ -37,6 +73,24 @@ estateController.get("/estates/:id([0-9]*)", async (req, res) => {
     const { id } = req.params;
     const data = await estateModel.findOne({
       where: { id: id },
+      include: [
+        {
+          model: estateTypeModel,
+          attributes: ["id", "name"],
+        },
+        {
+          model: energyLabelModel,
+          attributes: ["id", "name"],
+        },
+        {
+          model: cityModel,
+          attributes: ["id", "name", "zipcode"],
+        },
+        {
+          model: imageModel,
+          attributes: ["id", "filename", "author", "description"],
+        },
+      ],
     });
 
     if (!data || data.length === 0) {
@@ -47,7 +101,7 @@ estateController.get("/estates/:id([0-9]*)", async (req, res) => {
   }
 });
 
-estateController.post("/estates", async (req, res) => {
+estateController.post("/estates", Authorize, async (req, res) => {
   const {
     address,
     price,
@@ -66,8 +120,9 @@ estateController.post("/estates", async (req, res) => {
     floorplan,
     num_clicks,
     city_id,
-    type_id,
+    estate_type_id: type_id,
     energy_label_id,
+    image_id,
   } = req.body;
 
   if (
@@ -89,7 +144,8 @@ estateController.post("/estates", async (req, res) => {
     !num_clicks ||
     !city_id ||
     !type_id ||
-    !energy_label_id
+    !energy_label_id ||
+    !image_id
   ) {
     return res.json({ message: "Missing required data" });
   }
@@ -115,6 +171,7 @@ estateController.post("/estates", async (req, res) => {
       city_id,
       type_id,
       energy_label_id,
+      image_id,
     });
 
     res.status(201).json(result);
@@ -123,7 +180,7 @@ estateController.post("/estates", async (req, res) => {
   }
 });
 
-estateController.put("/estates", async (req, res) => {
+estateController.put("/estates", Authorize, async (req, res) => {
   const {
     id,
     address,
@@ -143,8 +200,9 @@ estateController.put("/estates", async (req, res) => {
     floorplan,
     num_clicks,
     city_id,
-    type_id,
+    estate_type_id: type_id,
     energy_label_id,
+    image_id,
   } = req.body;
 
   if (
@@ -167,7 +225,8 @@ estateController.put("/estates", async (req, res) => {
     !num_clicks ||
     !city_id ||
     !type_id ||
-    !energy_label_id
+    !energy_label_id ||
+    !image_id
   ) {
     return res.json({ message: "Missing required data" });
   }
@@ -195,6 +254,7 @@ estateController.put("/estates", async (req, res) => {
         city_id,
         type_id,
         energy_label_id,
+        image_id,
       },
       { where: { id } }
     );
@@ -205,28 +265,28 @@ estateController.put("/estates", async (req, res) => {
   }
 });
 
-estateController.delete("/estates/:id([0-9]*)", async (req, res) => {
-    const { id } = req.params;
+estateController.delete("/estates/:id([0-9]*)", Authorize, async (req, res) => {
+  const { id } = req.params;
 
-    const estate = await estateModel.findOne({
-        where: { id },
-    })
+  const estate = await estateModel.findOne({
+    where: { id },
+  });
 
-    if (id) {
-        try {
-            await estate.destroy();
+  if (id) {
+    try {
+      await estate.destroy();
 
-            res.status(200).send({
-                message: `Estate from id: ${id}, has been deleted`,
-            })
-        } catch (error) {
-            res.status(500).send({
-                message: `Couldn't delete estate from id: ${error.message}`,
-            });
-        }
-    } else {
-        res.status(400).send({
-            message: "Id is invalid",
-        });
+      res.status(200).send({
+        message: `Estate from id: ${id}, has been deleted`,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: `Couldn't delete estate from id: ${error.message}`,
+      });
     }
-})
+  } else {
+    res.status(400).send({
+      message: "Id is invalid",
+    });
+  }
+});

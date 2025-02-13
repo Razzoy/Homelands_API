@@ -1,13 +1,41 @@
 import express from "express";
 import { reviewModel } from "../models/reviewModel.js";
+import { Authorize } from "../utils/authUtils.js";
+import { estateModel } from "../models/estateModel.js";
+import { userModel } from "../models/userModel.js";
 
 export const reviewController = express.Router();
+
+reviewModel.belongsTo(estateModel, {
+  foreignKey: {
+    allowNull: false,
+  },
+});
+
+reviewModel.belongsTo(userModel, {
+  foreignKey: {
+    allowNull: false,
+  },
+});
+
+estateModel.hasMany(reviewModel);
+userModel.hasMany(reviewModel);
 
 //Route to list (READ)
 reviewController.get("/reviews", async (req, res) => {
   try {
     const data = await reviewModel.findAll({
       attributes: ["id", "subject", "comment"],
+      include: [
+        {
+          model: estateModel,
+          attributes: ["address", "price"],
+        },
+        {
+          model: userModel,
+          attributes: ["firstname", "lastname", "email"],
+        },
+      ],
     });
 
     if (!data || data.length === 0) {
@@ -26,6 +54,36 @@ reviewController.get("/reviews/:id([0-9]*)", async (req, res) => {
     const { id } = req.params;
     const data = await reviewModel.findOne({
       where: { id: id },
+      include: [
+        {
+          model: estateModel,
+          attributes: [
+            "id",
+            "address",
+            "price",
+            "num_rooms",
+            "num_floors",
+            "floor_space",
+            "ground_space",
+            "basement_space",
+            "year_of_construction",
+            "city_id",
+            "type_id",
+            "energy_label_id",
+          ],
+        },
+        {
+          model: userModel,
+          attributes: [
+            "firstname",
+            "lastname",
+            "email",
+            "password",
+            "refresh_token",
+            "is_active",
+          ],
+        },
+      ],
     });
 
     if (!data) {
@@ -38,7 +96,7 @@ reviewController.get("/reviews/:id([0-9]*)", async (req, res) => {
 });
 
 //Route to create (CREATE)
-reviewController.post("/reviews", async (req, res) => {
+reviewController.post("/reviews", Authorize , async (req, res) => {
   const { subject, comment, num_stars, date, estate_id, user_id, is_active } =
     req.body;
 
@@ -72,7 +130,7 @@ reviewController.post("/reviews", async (req, res) => {
 });
 
 //Route to update (UPDATE)
-reviewController.put("/reviews", async (req, res) => {
+reviewController.put("/reviews", Authorize , async (req, res) => {
   const {
     subject,
     comment,
@@ -110,7 +168,7 @@ reviewController.put("/reviews", async (req, res) => {
 });
 
 //Route to delete (DELETE)
-reviewController.delete("/reviews/:id([0-9]*)", async (req, res) => {
+reviewController.delete("/reviews/:id([0-9]*)", Authorize , async (req, res) => {
   const { id } = req.params;
 
   const review = await reviewModel.findOne({

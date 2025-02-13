@@ -1,6 +1,14 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import {dbController} from './controller/dbController.js'
+import { authController } from './controller/authController.js';
+import { cityController } from './controller/cityController.js';
+import { estateController } from './controller/estateController.js';
+import { estateTypeController } from './controller/estateTypeController.js'
+import { favoriteController } from './controller/favoriteController.js';
+import { reviewController } from './controller/reviewController.js';
+import { staffController } from './controller/staffController.js';
+import { userController } from './controller/userController.js';
 
 dotenv.config()
 console.log(process.env);
@@ -16,6 +24,15 @@ app.get('/', (req, res) => {
 })
 
 app.use(dbController)
+app.use(authController)
+app.use(cityController)
+app.use(estateController)
+app.use(estateTypeController)
+app.use(favoriteController)
+app.use(reviewController)
+app.use(staffController)
+app.use(userController)
+
 
 app.get('*', (req,res) => {
     res.send('Could not find file')

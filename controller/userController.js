@@ -1,10 +1,11 @@
 import express from "express";
 import { userModel } from "../models/userModel.js";
+import { Authorize } from "../utils/authUtils.js";
 
 export const userController = express.Router();
 
 //Route to list (READ)
-userController.get("/users", async (req, res) => {
+userController.get("/users", Authorize , async (req, res) => {
   try {
     const data = await userModel.findAll({
       attributes: ["id", "firstname", "email", "is_active"],
@@ -21,7 +22,7 @@ userController.get("/users", async (req, res) => {
 });
 
 //Route to details (READ)
-userController.get("/users/:id([0-9]*)", async (req, res) => {
+userController.get("/users/:id([0-9]*)", Authorize , async (req, res) => {
   try {
     const { id } = req.params;
     const data = await userModel.findOne({
@@ -70,7 +71,7 @@ userController.post("/users", async (req, res) => {
 });
 
 //Route to update (UPDATE)
-userController.put("/users", async (req, res) => {
+userController.put("/users", Authorize , async (req, res) => {
   const {
     firstname,
     lastname,
@@ -106,7 +107,7 @@ userController.put("/users", async (req, res) => {
 });
 
 //Route to delete (DELETE)
-userController.delete("/users/:id([0-9]*)", async (req, res) => {
+userController.delete("/users/:id([0-9]*)", Authorize , async (req, res) => {
   const { id } = req.params;
 
   const user = await userModel.findOne({

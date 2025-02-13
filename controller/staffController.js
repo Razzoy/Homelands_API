@@ -1,5 +1,6 @@
 import express from "express";
 import { staffModel } from "../models/staffModel.js";
+import { Authorize } from "../utils/authUtils.js";
 
 export const staffController = express.Router();
 
@@ -38,7 +39,7 @@ staffController.get("/staffs/:id([0-9]*)", async (req, res) => {
 });
 
 //Route to create (CREATE)
-staffController.post("/staffs", async (req, res) => {
+staffController.post("/staffs", Authorize , async (req, res) => {
   const { firstname, lastname, position, phone, email, image } =
     req.body;
 
@@ -70,7 +71,7 @@ staffController.post("/staffs", async (req, res) => {
 });
 
 //Route to update (UPDATE)
-staffController.put("/staffs", async (req, res) => {
+staffController.put("/staffs", Authorize , async (req, res) => {
   const {
     firstname,
     lastname,
@@ -106,7 +107,7 @@ staffController.put("/staffs", async (req, res) => {
 });
 
 //Route to delete (DELETE)
-staffController.delete("/staffs/:id([0-9]*)", async (req, res) => {
+staffController.delete("/staffs/:id([0-9]*)", Authorize , async (req, res) => {
   const { id } = req.params;
 
   const staff = await staffModel.findOne({

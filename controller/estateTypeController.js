@@ -1,5 +1,6 @@
 import express from "express";
 import { estateTypeModel } from "../models/estateTypeModel.js";
+import { Authorize } from "../utils/authUtils.js";
 
 export const estateTypeController = express.Router();
 
@@ -41,7 +42,7 @@ estateTypeController.get("/estateTypes/:id([0-9]*)", async (req, res) => {
 
 
 //Route to create (CREATE)
-estateTypeController.post("/estateTypes", async (req, res) => {
+estateTypeController.post("/estateTypes", Authorize , async (req, res) => {
   const { name } = req.body;
 
   if ( !name ) {
@@ -60,7 +61,7 @@ estateTypeController.post("/estateTypes", async (req, res) => {
 });
 
 //Route to update (UPDATE)
-estateTypeController.put("/estateTypes", async (req, res) => {
+estateTypeController.put("/estateTypes", Authorize , async (req, res) => {
   const { name, id } = req.body;
 
   if (!id || !name ) {
@@ -80,7 +81,7 @@ estateTypeController.put("/estateTypes", async (req, res) => {
 });
 
 //Route to delete (DELETE)
-estateTypeController.delete("/estateTypes/:id([0-9]*)", async (req, res) => {
+estateTypeController.delete("/estateTypes/:id([0-9]*)", Authorize , async (req, res) => {
   const { id } = req.params;
 
   const estateType = await estateTypeModel.findOne({

@@ -4,7 +4,6 @@
   "description": "API in NodeJS, Express og Sequelize",
   "main": "index.js",
   "type": "module",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,10 +19,13 @@
   "homepage": "https://github.com/Razzoy/Homelands_API#readme",
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "csv-parser": "^3.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0",
+    "path": "^0.12.7",
     "sequelize": "^6.37.5"
   }
-  
 }
