@@ -106,7 +106,7 @@ estateController.post("/estates", Authorize, async (req, res) => {
   const {
     address,
     price,
-    payput,
+    payout,
     gross,
     net,
     cost,
@@ -129,7 +129,7 @@ estateController.post("/estates", Authorize, async (req, res) => {
   if (
     !address ||
     !price ||
-    !payput ||
+    !payout ||
     !gross ||
     !net ||
     !cost ||
@@ -155,7 +155,7 @@ estateController.post("/estates", Authorize, async (req, res) => {
     const result = await estateModel.create({
       address,
       price,
-      payput,
+      payout,
       gross,
       net,
       cost,
@@ -186,7 +186,7 @@ estateController.put("/estates", Authorize, async (req, res) => {
     id,
     address,
     price,
-    payput,
+    payout,
     gross,
     net,
     cost,
@@ -210,7 +210,7 @@ estateController.put("/estates", Authorize, async (req, res) => {
     !id ||
     !address ||
     !price ||
-    !payput ||
+    !payout ||
     !gross ||
     !net ||
     !cost ||
@@ -238,7 +238,7 @@ estateController.put("/estates", Authorize, async (req, res) => {
         id,
         address,
         price,
-        payput,
+        payout,
         gross,
         net,
         cost,
