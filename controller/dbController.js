@@ -28,11 +28,11 @@ dbController.get("/seedfromcsv", async (req, res) => {
     // Indsæt data fra CSV filer til de respektive modeller
     await seedFromCsv("user.csv", userModel);
     await seedFromCsv("city.csv", cityModel);
+    await seedFromCsv("image.csv", imageModel);
     await seedFromCsv("estate-type.csv", estateTypeModel);
     await seedFromCsv("energy-label.csv", energyLabelModel);
     await seedFromCsv("estate.csv", estateModel);
     await seedFromCsv("estate-image-rel.csv", estateImageRelModel);
-    await seedFromCsv("image.csv", imageModel);
     await seedFromCsv("favorite.csv", favoriteModel);
     await seedFromCsv("review.csv", reviewModel);
     await seedFromCsv("staff.csv", staffModel);
