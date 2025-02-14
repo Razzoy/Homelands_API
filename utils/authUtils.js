@@ -1,12 +1,3 @@
-/**
- * Authentication and Authorization Module
- *
- * This module provides authentication and authorization functionality for users.
- * - `Authenticate`: Validates user credentials and generates JWT tokens.
- * - `Authorize`: Middleware that checks and refreshes access tokens if needed.
- * - `getUserFromToken`: Extracts user ID from a given JWT token.
- */
-
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
