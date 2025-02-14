@@ -96,6 +96,7 @@ estateController.get("/estates/:id([0-9]*)", async (req, res) => {
     if (!data || data.length === 0) {
       return res.json({ message: `Could not find estate on id #${id}` });
     }
+    res.json(data);
   } catch (error) {
     console.error(`Could not get estate details: ${error}`);
   }

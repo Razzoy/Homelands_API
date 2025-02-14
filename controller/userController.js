@@ -32,6 +32,7 @@ userController.get("/users/:id([0-9]*)", Authorize , async (req, res) => {
     if (!data) {
       return res.json({ message: `Could not find user on id #${id}` });
     }
+    res.json(data);
     console.log(data);
   } catch (error) {
     console.error(`Could not get user details: ${error}`);

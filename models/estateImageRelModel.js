@@ -1,5 +1,7 @@
 import sequelize from "../config/sequelizeConfig.js";
 import { Model, DataTypes } from "sequelize";
+import { estateModel } from "./estateModel.js";
+import { imageModel } from "./imageModel.js";
 
 export class estateImageRelModel extends Model {}
 
@@ -12,98 +14,26 @@ estateImageRelModel.init(
       primaryKey: true,
     },
 
-    address: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-
-    price: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-
-    payout: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-
-    gross: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-
-    net: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-
-    cost: {
-      type: DataTypes.DOUBLE,
-      allowNull: false,
-    },
-
-    num_rooms: {
+    estate_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: estateModel,
+        key: "id",
+      },
     },
 
-    num_floors: {
+    image_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: imageModel,
+        key: "id",
+      },
     },
 
-    floor_space: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    ground_space: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    basement_space: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    year_of_construction: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    year_rebuilt: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    description: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-
-    floorplan: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-
-    num_clicks: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    city_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    type_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-
-    energy_label_id: {
-      type: DataTypes.INTEGER,
+    is_main: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
   },

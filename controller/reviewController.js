@@ -89,6 +89,7 @@ reviewController.get("/reviews/:id([0-9]*)", async (req, res) => {
     if (!data) {
       return res.json({ message: `Could not find review on id #${id}` });
     }
+    res.json(data);
     console.log(data);
   } catch (error) {
     console.error(`Could not get review details: ${error}`);

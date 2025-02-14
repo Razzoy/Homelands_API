@@ -36,6 +36,7 @@ cityController.get("/cities/:id([0-9]*)", async (req, res) => {
     if (!data) {
       return res.json({ message: `Could not find city on id #${id}`});
     }
+    res.json(data);
     console.log(data);
   } catch (error) {
     console.error(`Could not get city details: ${error}`);
